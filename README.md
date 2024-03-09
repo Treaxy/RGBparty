@@ -1,5 +1,11 @@
 ! [All new releases](https://github.com/Treaxy/RGBparty/releases) !
 
+
+#Warning
+
+This plugin have speedy color changes, its can trigger epilepsy.
+
+
 # İnstallition:
 
 You can install this plugin, download the .dll file and placing it in ``AppData\Roaming\EXILED\Plugins``.
