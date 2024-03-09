@@ -1,7 +1,7 @@
 ! [All new releases](https://github.com/Treaxy/RGBparty/releases) !
 
 
-#Warning
+# Warning
 
 This plugin have speedy color changes, its can trigger epilepsy.
 
