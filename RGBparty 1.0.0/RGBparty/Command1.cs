@@ -13,11 +13,8 @@ namespace RGBparty
         public class RgbParty : ICommand, IUsageProvider
         {
             public string Command => "RGBparty";
-
             public string[] Aliases => new[] { "rgbp" };
-
             public string Description => "Disco!! Party!!";
-
             public string[] Usage { get; } = { "Duration", "Speed" };
 
             public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
@@ -48,34 +45,36 @@ namespace RGBparty
                 return true;
             }
 
+            public static readonly List<Color> Colors = new List<Color>
+            {
+                new Color(1, 0.2f, 0.2f), //default red is dim
+                new Color(1, 0.5f, 0), //orange
+                Color.yellow,
+                Color.green*1.1f,
+                Color.cyan,
+                new Color(0F, 0.65F, 1.3F), //nice blue
+                new Color(0.78F, 0.13F, 1.3F), //purple
+            };
+            
             public static IEnumerator<float> Party(float duration, float lerpSpeed)
             {
-                var colors = new List<Color>
-                {
-                    new Color(1, 0.2f, 0.2f), //default red is dim
-                    new Color(1, 0.5f, 0), //orange
-                    Color.yellow,
-                    Color.green*1.1f,
-                    Color.cyan,
-                    new Color(0F, 0.65F, 1.3F), //nice blue
-                    new Color(0.78F, 0.13F, 1.3F), //purple
-                };
+                
 
-                var currentColor = Color.white;
+                var currentColor = Color.clear;
 
                 //lerp between colors
                 for (float i = 0; i < duration * lerpSpeed; i += 0.05f)
                 {
-                    currentColor = Color.Lerp(colors[(int)(i % colors.Count)], colors[(int)((i + 1) % colors.Count)], i % 1);
+                    currentColor = Color.Lerp(Colors[(int)(i % Colors.Count)], Colors[(int)((i + 1) % Colors.Count)], i % 1);
                     Map.ChangeLightsColor(currentColor * 1.5f);
                     yield return Timing.WaitForSeconds(0.05f / lerpSpeed);
                 }
 
                 //lerp back to white
-                for (float i = 0; i < 1; i += 0.1f)
+                for (float i = 0; i < 1; i += 0.05f)
                 {
-                    Map.ChangeLightsColor(Color.Lerp(currentColor * 1.5f, Color.white, i));
-                    yield return Timing.WaitForSeconds(0.1f);
+                    Map.ChangeLightsColor(Color.Lerp(currentColor * 1.5f, Color.clear, i));
+                    yield return Timing.WaitForSeconds(0.05f / lerpSpeed);
                 }
             }
         }
