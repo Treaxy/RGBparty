@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using System.Collections.Generic;
 using CommandSystem;
 using Exiled.API.Features;
 using Exiled.Permissions.Extensions;
@@ -14,14 +15,14 @@ namespace RGBparty
         {
             public string Command => "RGBparty";
             public string[] Aliases => new[] { "rgbp" };
-            public string Description => "Disco!! Party!!";
+            public string Description => "This plugin start a 30 second mini party";
             public string[] Usage { get; } = { "Duration", "Speed" };
 
             public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
             {
                 if (!sender.CheckPermission("rgbparty"))
                 {
-                    response = "You don't have permission to use this command! (rgbparty)";
+                    response = "You need 'rgbparty' permission to use this command!";
                     return false;
                 }
 
@@ -30,7 +31,7 @@ namespace RGBparty
                 {
                     duration = newDuration;
                 }
-                
+
                 var lerpSpeed = 2.5f;
                 if (arguments.Count >= 2 && float.TryParse(arguments.At(1), out float newLerpSpeed))
                 {
@@ -47,33 +48,29 @@ namespace RGBparty
 
             public static readonly List<Color> Colors = new List<Color>
             {
-                new Color(1, 0.2f, 0.2f), //default red is dim
-                new Color(1, 0.5f, 0), //orange
+                new Color(1, 0.2f, 0.2f),
+                new Color(1, 0.5f, 0),
                 Color.yellow,
                 Color.green*1.1f,
                 Color.cyan,
-                new Color(0F, 0.65F, 1.3F), //nice blue
-                new Color(0.78F, 0.13F, 1.3F), //purple
+                new Color(0f, 0.65f, 1.3f),
+                new Color(0.78f, 0.13f, 1.3f),
             };
-            
+
             public static IEnumerator<float> Party(float duration, float lerpSpeed)
             {
-                
-
                 var currentColor = Color.clear;
 
-                //lerp between colors
-                for (float i = 0; i < duration * lerpSpeed; i += 0.05f)
+                for (float inter = 0; inter < duration * lerpSpeed; inter += 0.05f)
                 {
-                    currentColor = Color.Lerp(Colors[(int)(i % Colors.Count)], Colors[(int)((i + 1) % Colors.Count)], i % 1);
+                    currentColor = Color.Lerp(Colors[(int)(inter % Colors.Count)], Colors[(int)((inter + 1) % Colors.Count)], inter % 1);
                     Map.ChangeLightsColor(currentColor * 1.5f);
                     yield return Timing.WaitForSeconds(0.05f / lerpSpeed);
                 }
 
-                //lerp back to white
-                for (float i = 0; i < 1; i += 0.05f)
+                for (float intar = 0; intar < 1; intar += 0.05f)
                 {
-                    Map.ChangeLightsColor(Color.Lerp(currentColor * 1.5f, Color.clear, i));
+                    Map.ChangeLightsColor(Color.Lerp(currentColor * 1.5f, Color.clear, intar));
                     yield return Timing.WaitForSeconds(0.05f / lerpSpeed);
                 }
             }
